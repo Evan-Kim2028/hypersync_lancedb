@@ -19,4 +19,4 @@ The cryo.freeze function took 583.34046626091 seconds to execute
 about 1.2gb
 
 
-Hypersync time - 3 seconds, took about 100mb
+Hypersync time - 3 seconds, took about 100mb. But missing about 20k blocks
