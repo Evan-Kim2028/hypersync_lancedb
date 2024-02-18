@@ -9,7 +9,6 @@ output: dict[str] = cryo.freeze(
     blocks=["1800000:1900000"],
     hex=True,
     rpc="http://91.216.245.128:1131/eth-rpc",
-    requests_per_second=24,
     no_verbose=False,  # this doesn't seem to have any effect
     output_dir="data/raw/",
     subdirs=["datatype"],
