@@ -1,56 +1,57 @@
 import asyncio
 import hypersync
-import time  # Import the time module
+from hypersync import BlockField, TransactionField
+import time
+
+
+QUERY = hypersync.Query(
+    from_block=18000000,
+    to_block=18100000,
+    include_all_blocks=True,
+    field_selection=hypersync.FieldSelection(
+        block=[
+            BlockField.NUMBER,
+            BlockField.TIMESTAMP,
+            BlockField.HASH,
+            BlockField.GAS_USED,
+        ],
+        transaction=[
+            TransactionField.BLOCK_NUMBER,
+            TransactionField.TRANSACTION_INDEX,
+            TransactionField.HASH,
+            TransactionField.FROM,
+            TransactionField.TO,
+            TransactionField.VALUE,
+            TransactionField.INPUT,
+            TransactionField.GAS,
+            TransactionField.GAS_PRICE,
+            TransactionField.MAX_PRIORITY_FEE_PER_GAS,
+            TransactionField.MAX_FEE_PER_GAS,
+            TransactionField.TYPE
+        ]
+    )
+)
+
+
+async def query_txs_blocks():
+    client = hypersync.HypersyncClient()
+    start_time = time.time()
+
+    await client.create_parquet_folder(
+        QUERY, hypersync.ParquetConfig(
+            path="data",
+            retry=True,
+            hex_output=True,
+        )
+    )
+    execution_time = (time.time() - start_time)
+    print(f"create_parquet_folder time: {execution_time}")
 
 
 async def main():
-    # Create hypersync client using the mainnet hypersync endpoint
-    client = hypersync.hypersync_client(
-        "https://eth.hypersync.xyz",
-    )
+    await query_txs_blocks()
 
-    height = await client.get_height()
-    print("Height:", height)
-
-    query = {
-        # start from block 0 and go to the end of the chain (we don't specify a toBlock).
-        "from_block": 1800000,
-        "to_block": 1900000,
-        "block": [{}],
-        "transactions": [{}],
-
-        # Select the fields we are interested in
-        "field_selection": {
-            "block": ["number", "timestamp", "hash"],
-            "transaction": [
-                "block_number",
-                "transaction_index",
-                "hash",
-                "from",
-                "to",
-                "value",
-                "input",
-            ],
-        },
-    }
-
-    # Start timing before the query
-    start_time = time.time()
-
-    # run the query once
-    res = await client.send_req(query)
-    # print("res: ", res)
-
-    # End timing after the query
-    end_time = time.time()
-
-    # Calculate the duration
-    duration = end_time - start_time
-    print(f"Query took {duration} seconds")
-
-    # Create a parquet folder by running this query and writing the contents to disk
-    print("write data to parquet...")
-    await client.create_parquet_folder(query, "data")
-    print("finished writing parquet folder")
 
 asyncio.run(main())
+
+print('done')
