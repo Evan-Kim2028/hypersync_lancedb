@@ -1,0 +1,30 @@
+[project]
+name = "hypersync-lancedb"
+version = "0.1.0"
+description = "Add your description here"
+authors = [
+    { name = "Evan K", email = "ekcopersonal@gmail.com" }
+]
+dependencies = [
+    "hypersync>=0.6.2",
+    "polars>=0.20.25",
+    "lancedb-tables>=0.1.1",
+    "ipykernel>=6.29.4",
+    "lancedb>=0.6.13",
+]
+readme = "README.md"
+requires-python = ">= 3.8"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.rye]
+managed = true
+dev-dependencies = []
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/hypersync_lancedb"]
