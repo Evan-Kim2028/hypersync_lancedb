@@ -28,7 +28,8 @@ async def historical_blocks_txs_sync():
         uri=uri, table=blocks_table_name)
 
     # set to_block and from_block to query the desired block range.
-    to_block: int = 19_850_000
+    to_block: int = 19_855_000
+    # fetch the latest block number from the blocks table. Alternatively can forgo the database query and set the to_block manually
     from_block: int = blocks_table.to_polars().select('block_number').with_columns(
         pl.col('block_number').max()).collect()['block_number'][0]
 
